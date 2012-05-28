@@ -1,0 +1,43 @@
+STRING szregkey;
+
+prototype void DeleteShinkenFS();
+prototype void DeleteShinkenREGServices();
+prototype NUMBER DelReg(STRING);
+
+function void DeleteShinkenFS()
+begin
+	DeleteDir(INSTALLDIR, ALLCONTENTS);
+end;
+
+function void DeleteShinkenREGServices()
+STRING scdirectory;
+begin
+	scdirectory = WINDIR + "\\SYSTEM32\\sc.exe";
+	if (Is(FILE_EXISTS, scdirectory)) then
+		//SprintfBox(INFORMATION,"Information","Using SC.EXE");
+		// To be correct, if the sc.exe exist, launch sc delete service....
+		LaunchApplication(scdirectory," delete \"Shinken Arbiter\"","",SW_HIDE,2000,LAAW_OPTION_USE_SHELLEXECUTE|LAAW_OPTION_WAIT);
+		LaunchApplication(scdirectory," delete \"Shinken Broker\"","",SW_HIDE,2000,LAAW_OPTION_USE_SHELLEXECUTE|LAAW_OPTION_WAIT);
+		LaunchApplication(scdirectory," delete \"Shinken Poller\"","",SW_HIDE,2000,LAAW_OPTION_USE_SHELLEXECUTE|LAAW_OPTION_WAIT);
+		LaunchApplication(scdirectory," delete \"Shinken Receiver\"","",SW_HIDE,2000,LAAW_OPTION_USE_SHELLEXECUTE|LAAW_OPTION_WAIT);
+		LaunchApplication(scdirectory," delete \"Shinken Reactionner\"","",SW_HIDE,2000,LAAW_OPTION_USE_SHELLEXECUTE|LAAW_OPTION_WAIT);
+		LaunchApplication(scdirectory," delete \"Shinken Scheduler\"","",SW_HIDE,2000,LAAW_OPTION_USE_SHELLEXECUTE|LAAW_OPTION_WAIT);
+	else
+		//SprintfBox(INFORMATION,"Information","Using DelReg system");
+		// Not very good wait to delete services entries, but if sc.exe doesn't exist....
+		RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);
+		DelReg("SYSTEM\\CurrentControlSet\\services\\Shinken Scheduler");
+		DelReg("SYSTEM\\CurrentControlSet\\services\\Shinken Reactionner");
+		DelReg("SYSTEM\\CurrentControlSet\\services\\Shinken Receiver");
+		DelReg("SYSTEM\\CurrentControlSet\\services\\Shinken Poller");
+		DelReg("SYSTEM\\CurrentControlSet\\services\\Shinken Broker");
+		DelReg("SYSTEM\\CurrentControlSet\\services\\Shinken Arbiter");
+	endif;
+end;
+
+function NUMBER DelReg(szregkey)
+begin
+	if (RegDBDeleteKey (szregkey) < 0) then 
+        MessageBox ("RegDBDeleteKey failed.", SEVERE); 
+    endif;
+end;

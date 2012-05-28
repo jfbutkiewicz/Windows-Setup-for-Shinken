@@ -1,0 +1,1 @@
+d:\Python27\python.exe .\shinken-arbiter.py -c .\etc\nagios-windows.cfg -c .\etc\shinken-specific-windows.cfg

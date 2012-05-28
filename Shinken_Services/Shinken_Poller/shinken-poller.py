@@ -1,0 +1,80 @@
+#!/usr/bin/env python
+#Copyright (C) 2009-2011 :
+#    Gabes Jean, naparuba@gmail.com
+#    Gerhard Lausser, Gerhard.Lausser@consol.de
+#    Gregory Starck, g.starck@gmail.com
+#    Hartmut Goebel, h.goebel@goebel-consult.de
+#
+#This file is part of Shinken.
+#
+#Shinken is free software: you can redistribute it and/or modify
+#it under the terms of the GNU Affero General Public License as published by
+#the Free Software Foundation, either version 3 of the License, or
+#(at your option) any later version.
+#
+#Shinken is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU Affero General Public License for more details.
+#
+#You should have received a copy of the GNU Affero General Public License
+#along with Shinken.  If not, see <http://www.gnu.org/licenses/>.
+
+
+#This class is the application that launches the checks
+#The poller listens to the Arbiter for the configuration sent through 
+#the port given as first argument.
+#The configuration sent by the arbiter specifies on which schedulers the 
+#poller will take its checks.
+#When the poller is already launched and has its own conf, it still 
+#listens to arbiter (one a timeout)
+#In case the arbiter has a new conf to send, the poller forget his old 
+#schedulers (and the checks that goes with them) and take the new ones 
+#instead.
+
+import sys
+import os
+import optparse
+
+try:
+    from shinken.bin import VERSION
+    import shinken
+except ImportError:
+    # If importing shinken fails, try to load from current directory
+    # or parent directory to support running without installation.
+    # Submodules will then be loaded from there, too.
+    import imp
+    imp.load_module('shinken', *imp.find_module('shinken', [os.path.realpath("."), os.path.realpath(".."), os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), "..")]))
+
+
+from shinken.daemons.pollerdaemon import Poller
+from shinken.bin import VERSION
+
+
+parser = optparse.OptionParser(
+    "%prog [options]", version="%prog " + VERSION)
+parser.add_option('-c', '--config',
+                  dest="config_file", metavar="CONFIG-FILE",
+                  help='Config file')
+parser.add_option('-d', '--daemon', action='store_true',
+                  dest="is_daemon",
+                  help="Run in daemon mode")
+parser.add_option('-r', '--replace', action='store_true',
+                  dest="do_replace",
+                  help="Replace previous running poller")
+parser.add_option('--debugfile', dest='debug_file',
+                  help=("Debug file. Default: not used "
+                        "(why debug a bug free program? :) )"))
+opts, args = parser.parse_args()
+if args:
+    parser.error("Does not accept any argument.")
+
+# Protect for windows multiprocessing that will RELAUNCH all
+if __name__ == '__main__':
+    daemon = Poller(debug=opts.debug_file is not None, **opts.__dict__)
+    daemon.main()
+
+# For perf tuning :
+#import cProfile
+#cProfile.run('''daemon.main()''', '/tmp/poller.profile')
+

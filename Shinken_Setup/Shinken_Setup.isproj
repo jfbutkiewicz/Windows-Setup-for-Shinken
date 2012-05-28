@@ -1,0 +1,68 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+	<PropertyGroup>
+		<!-- Select a Product Configuration -->
+		<InstallShieldProductConfiguration>Default Configuration</InstallShieldProductConfiguration>
+		<!-- Select a Visual Studio Configuration / InstallShield Release -->
+		<Configuration>Debug</Configuration>
+		<InstallShieldRelease>$(Configuration)</InstallShieldRelease>
+	</PropertyGroup>
+	<ItemGroup>
+		<!-- The InstallShieldProject item selects the project to build -->
+		<InstallShieldProject Include="$(MSBuildProjectDirectory)\$(MSBuildProjectName).ism"/>
+		<!-- The InstallShieldReleaseFlags sets Release Flags -->
+		<!--<InstallShieldReleaseFlags Include=""/>-->
+		<!-- The InstallShieldMergeModulePath specifies what directories are
+		searched for Merge Modules -->
+		<!--<InstallShieldMergeModulePath Include=""/>-->
+	</ItemGroup>
+	<ItemGroup>
+		<!-- The ProjectReference items refer to any Visual Studio solutions you want to automatically probe for Project Output Groups.  -->
+	</ItemGroup>
+	<ItemGroup>
+		<!-- The TaggedOutputs items allow you to explicitly add extra files to output groups. Each item must include both Name and OutputGroup, as well as TargetPath metadata values. -->
+		<!--<TaggedOutputs Include="C:\My Test Exe.exe">
+			<Name>My Test Project</Name>
+			<OutputGroup>Primary output</OutputGroup>
+			<TargetPath>My Test Exe.exe</TargetPath>
+		</TaggedOutputs> -->
+	</ItemGroup>
+	<Import Project="$(MSBuildExtensionsPath32)\InstallShield\2011\InstallShield.targets"/>
+	<ItemGroup>
+		<ProjectReference Include="..\Shinken_Services\Shinken_Arbiter\Shinken_Arbiter.csproj">
+			<Name>Shinken_Arbiter</Name>
+			<Project>{355B5FC9-F13B-4C5D-AD18-AFBCBBCB0605}</Project>
+		</ProjectReference>
+		<ProjectReference Include="..\Shinken_Services\Shinken_Broker\Shinken_Broker.csproj">
+			<Name>Shinken_Broker</Name>
+			<Project>{1C7CA1D1-69C6-4BE8-826C-6CDD468CE728}</Project>
+		</ProjectReference>
+		<ProjectReference Include="..\Shinken_Services\Shinken_Poller\Shinken_Poller.csproj">
+			<Name>Shinken_Poller</Name>
+			<Project>{0E753E79-E084-47B5-89EE-A147C1320647}</Project>
+		</ProjectReference>
+		<ProjectReference Include="..\Shinken_Services\Shinken_Receiver\Shinken_Receiver.csproj">
+			<Name>Shinken_Receiver</Name>
+			<Project>{AAF5E63A-7921-4856-A97D-BCB622BEF604}</Project>
+		</ProjectReference>
+		<ProjectReference Include="..\Shinken_Services\Shinken_Scheduler\Shinken_Scheduler.csproj">
+			<Name>Shinken_Scheduler</Name>
+			<Project>{FEBB7FA4-C7A0-41B0-BE9F-D7C9670D29DA}</Project>
+		</ProjectReference>
+		<ProjectReference Include="..\Shinken_Services\Shinken_Services\Shinken_Services.csproj">
+			<Name>Shinken_Services</Name>
+			<Project>{9EB3A02C-C2D0-4B4F-B55F-525AEEEB25EC}</Project>
+		</ProjectReference>
+		<ProjectReference Include="..\..\Veosoft_LogSystem\Veo_LogSystem\VeoSoft_LogSystem.csproj">
+			<Name>VeoSoft_LogSystem</Name>
+			<Project>{10698456-B008-4293-8A9F-F66BEEFE11E7}</Project>
+		</ProjectReference>
+		<ProjectReference Include="..\Shinken_Services\Shinken_Reactionner\Shinken_Reactionner.csproj">
+			<Name>Shinken_Reactionner</Name>
+			<Project>{F98C0A1D-1015-40FA-A65A-80E407988057}</Project>
+		</ProjectReference>
+		<ProjectReference Include="..\Shinken_Services\CreateEventSource\CreateEventSource.csproj">
+			<Name>CreateEventSource</Name>
+			<Project>{16E8E074-8BB7-4C6C-A0A9-F57A951AAF0C}</Project>
+		</ProjectReference>
+	</ItemGroup>
+</Project>

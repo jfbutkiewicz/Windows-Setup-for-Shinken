@@ -1,0 +1,51 @@
+prototype NUMBER sdStopServices();
+
+#define BUTTON_NEXT 1
+#define BUTTON_BACK 12
+#define BUTTON_STOPSRV 1201
+#define BUTTON_CANCEL 9
+
+NUMBER nResult;
+NUMBER nCtrl;
+NUMBER nReturn;
+BOOL bDone;
+HWND hwndDlg;
+
+function NUMBER sdStopServices()
+	NUMBER returnvalue;
+begin
+	nResult = EzDefineDialog("sdStopServices", ISUSER, "", 20000);
+	returnvalue = 0;
+	bDone = FALSE;
+	while (!bDone)
+		nCtrl = WaitOnDialog("sdStopServices");
+		switch(nCtrl)
+			case DLG_INIT:
+				hwndDlg = CmdGetHwndDlg("sdStopServices");
+				SdGeneralInit("sdStopServices", hwndDlg, 0, "");
+			case 2, DLG_CLOSE:
+				bDone=TRUE;
+			case BUTTON_STOPSRV:
+				// Stop the services....
+				// SprintfBox(INFORMATION,"Information","Stopping services");
+				ServiceStopService("Shinken Arbiter");
+				ServiceStopService("Shinken Broker");
+				ServiceStopService("Shinken Poller");
+				ServiceStopService("Shinken Receiver");
+				ServiceStopService("Shinken Scheduler");
+				ServiceStopService("Shinkent Reactionner");
+				bDone = TRUE;
+			case BUTTON_CANCEL:
+				returnvalue = BUTTON_CANCEL;
+				bDone = TRUE;
+			case SD_PBUT_CANCEL:
+				returnvalue = BUTTON_CANCEL;
+				bDone = TRUE;
+			default:
+				bDone = TRUE;
+		endswitch;
+	endwhile;
+	EndDialog("sdStopServices");
+	ReleaseDialog("sdStopServices");
+	return returnvalue;
+end;
