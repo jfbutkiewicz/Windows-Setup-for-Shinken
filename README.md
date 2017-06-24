@@ -3,7 +3,7 @@ Windows-Setup-for-Shinken
 
 Licensed under GNU Affero GPL 
 
-Shinken is a free IT monitoring solution. based on the Nagios but fully written in python, this solution is a pretty good thing to switch from nagios. All the configuration files can be take and re-use from nagios. Please take a look on the Shinken Web Site :
+Shinken is a free IT monitoring solution. based on the Nagios but fully written in python, this solution is a pretty good thing to switch from nagios. All the configuration files can be taken and re-use from nagios. Please take a look on the Shinken Web Site :
 
 http://www.shinken-monitoring.org/
 
